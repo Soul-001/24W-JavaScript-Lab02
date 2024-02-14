@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8" />
+    <title>Lab 2 | COMP1073 Client-Side JavaScript</title>
+    <link href="./css/style.css" rel="stylesheet" />
+</head>
+
+<body>
+    <h1>Lab 2</h1>
+    <p>
+        This script will enable the user to adjust the below range input
+        elements to modify the <abbr title="Red, Green, Blue">RGB</abbr> values of the
+        <code>background-color</code> CSS property of the HTML element.
+    </p>
+    <label for="red">Red</label>
+    <input id="red" type="range" min="0" max="255" value="0" />
+    <label for="green">Green</label>
+    <input id="green" type="range" min="0" max="255" value="0" />
+    <label for="blue">Blue</label>
+    <input id="blue" type="range" min="0" max="255" value="0" />
+
+    <script>
+        /* Declare and initialize global variables */
+        // Select the HTML element to apply background color
+        var pageBg = document.querySelector("html");
+        // Get all input elements (sliders for RGB)
+        var sliders = document.getElementsByTagName("input");
+        // Initialize an array to store RGB values
+        var rgb = [0, 0, 0];
+    
+        /* Event handlers for range sliders */
+        // Loop through all sliders to attach an onchange event
+        for (var i = 0; i < sliders.length; i++) {
+            sliders[i].onchange = function () {
+                // Identify which slider was changed
+                var whichSlider = this.getAttribute("id");
+                // Get the new value of the slider
+                var sliderValue = this.value;
+                // Update the RGB array based on the slider that changed
+                var newRgb = changeRgb(whichSlider, sliderValue);
+                // Generate the new CSS color string
+                var newCSS = writeCSS(newRgb);
+                // Apply the new background color to the page
+                pageBg.style.backgroundColor = newCSS;
+            };
+        }
+    
+        /* Function to update RGB values */
+        function changeRgb(channel, value) {
+            // Parse the slider value to an integer
+            value = parseInt(value);
+    
+            // Update the appropriate RGB value based on which slider was changed
+            switch (channel) {
+                case 'red':
+                    rgb[0] = value;
+                    break;
+                case 'green':
+                    rgb[1] = value;
+                    break;
+                case 'blue':
+                    rgb[2] = value;
+                    break;
+                default:
+                    console.log("Unknown channel: " + channel);
+            }
+    
+            // Return the updated RGB array
+            return rgb;
+        }
+    
+        /* Function to generate CSS color string from RGB values */
+        function writeCSS(newRgb) {
+            // Start the CSS color string
+            var newColor = 'rgb(';
+            
+            // Loop through the RGB values to append them to the string
+            for (var i = 0; i < newRgb.length; i++) {
+                newColor += newRgb[i];
+                // Add a comma after each value except the last
+                if (i < newRgb.length - 1) {
+                    newColor += ',';
+                }
+            }
+            
+            // Close the CSS color string
+            newColor += ')';
+            
+            // Return the new CSS color string
+            return newColor;
+        }
+    </script>
+    
+</body>
+
+</html>
